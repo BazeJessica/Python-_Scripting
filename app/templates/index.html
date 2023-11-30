@@ -1,0 +1,70 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Outcome and Score Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link to your CSS file -->
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>NBA Outcome and Score Prediction</h1>
+
+        <img src="{{ url_for('static', filename='nba.jpeg') }}" alt="NBA Image" class="nba-image">
+
+        <div class="prediction-section">
+            <div class="prediction-type">
+                <h2>Predict Team Outcome</h2>
+                <form action="/predict_outcome" method="POST">
+                    <label for="selected_team_data">Select Team:</label>
+                    <select name="selected_team_data" id="selected_team_data">
+                        {% for team_data in outcome_data_listings %}
+                        <option value="{{ loop.index0 }}">{{ team_data }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Predict Outcome">
+                </form>
+                <!-- Add this part to display predictions -->
+                {% if outcome_prediction is defined %}
+                    <p>Outcome Prediction for <i>{{ selected_team }}</i>: <b>{{ outcome_prediction }}</b></p>
+                {% endif %}
+            </div>
+
+            <div class="prediction-type">
+                <h2>Predict Score</h2>
+                <form action="/predict_score" method="POST">
+                    <label for="selected_score_data">Select Team:</label>
+                    <select name="selected_score_data" id="selected_score_data">
+                        {% for player_data in scores_data_listings %}
+                        <option value="{{ loop.index0 }}">{{ player_data }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Predict Score">
+                </form>
+                <!-- Add this part to display predictions -->
+                {% if score_prediction is defined %}
+                    <p>Score Prediction for <i>{{ selected_team }}</i>: <b>{{ score_prediction }}</b></p></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Add this part to keep the dropdown menus visible -->
+        <script>
+            // This script ensures the dropdown menus remain open after form submission
+            document.addEventListener("DOMContentLoaded", function () {
+                let selectedTeamOutcome = "{{ selected_team }}";
+                let selectedScoreOutcome = "{{ selected_team }}";
+
+                document.getElementById("selected_team_data").value = selectedTeamOutcome;
+                document.getElementById("selected_score_data").value = selectedScoreOutcome;
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>
